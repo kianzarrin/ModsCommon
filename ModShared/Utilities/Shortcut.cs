@@ -1,4 +1,4 @@
-﻿using ColossalFramework;
+using ColossalFramework;
 using System;
 using UnityEngine;
 
@@ -51,6 +51,12 @@ namespace ModsCommon.Utilities
             Action = action;
         }
 
+        public Shortcut(SavedInputKey savedInputKey, string labelKey, Action action = null) {
+            LabelKey = labelKey;
+            InputKey = savedInputKey;
+            Action = action;
+        }
+
         public virtual bool Press(Event e)
         {
             if ((CanRepeat ? e.type == EventType.keyDown : e.type == EventType.KeyUp) && IsPressed)
@@ -70,10 +76,10 @@ namespace ModsCommon.Utilities
         public static implicit operator string (Shortcut shortcut) => shortcut.ToString();
     }
 
-    public abstract class ModShortcut<TypeMod> : Shortcut
-        where TypeMod : BaseMod<TypeMod>
-    {
-        public override string Label => SingletonMod<TypeMod>.Instance.GetLocalizedString(LabelKey);
-        public ModShortcut(string name, string labelKey, InputKey key, Action action = null) : base(BaseSettings<TypeMod>.SettingsFile, name, labelKey, key, action) { }
-    }
+    //public abstract class ModShortcut<TypeMod> : Shortcut
+    //    where TypeMod : BaseMod<TypeMod>
+    //{
+    //    public override string Label => SingletonMod<TypeMod>.Instance.GetLocalizedString(LabelKey);
+    //    public ModShortcut(string name, string labelKey, InputKey key, Action action = null) : base(BaseSettings<TypeMod>.SettingsFile, name, labelKey, key, action) { }
+    //}
 }
