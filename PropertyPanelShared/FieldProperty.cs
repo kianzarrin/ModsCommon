@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ModsCommon.UI
@@ -103,9 +103,9 @@ namespace ModsCommon.UI
             get => Field.WheelStep;
             set => Field.WheelStep = value;
         }
-        public bool WheelTip
+        public bool MouseTips
         {
-            set => Field.WheelTip = value;
+            set => Field.MouseTips = value;
         }
 
         public ComparableFieldPropertyPanel()
@@ -251,8 +251,8 @@ namespace ModsCommon.UI
         {
             set
             {
-                FieldA.WheelTip = value;
-                FieldB.WheelTip = value;
+                FieldA.MouseTips = value;
+                FieldB.MouseTips = value;
             }
         }
 

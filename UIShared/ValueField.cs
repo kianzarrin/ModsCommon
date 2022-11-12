@@ -1,4 +1,4 @@
-﻿using ColossalFramework.UI;
+using ColossalFramework.UI;
 using ModsCommon.Utilities;
 using System;
 using System.ComponentModel;
@@ -17,11 +17,13 @@ namespace ModsCommon.UI
         static string DefaultFormat => "{0}";
 
         public event Action<TypeValue> OnValueChanged;
-
+        public event Action OnResetValue;
         private TypeValue _value;
         private string _format;
         bool IReusable.InCache { get; set; }
         private bool InProcess { get; set; } = false;
+        public bool UseReset { get; set; } = true;
+
         public TypeValue Value
         {
             get => _value;
@@ -38,6 +40,17 @@ namespace ModsCommon.UI
         }
         public void SimulateEnterValue(TypeValue value) => ValueChanged(value, true);
 
+        protected override void OnKeyUp(UIKeyEventParameter p) {
+            base.OnKeyUp(p);
+            if(containsMouse && !containsFocus) {
+                if(UseReset && p.keycode == KeyCode.Delete) {
+                    ResetValue();
+                }
+            }
+        }
+
+        public virtual void ResetValue() => OnResetValue?.Invoke();
+
         protected virtual void ValueChanged(TypeValue value, bool callEvent = true)
         {
             if (!InProcess)
@@ -53,6 +66,7 @@ namespace ModsCommon.UI
                 InProcess = false;
             }
         }
+
         protected void RefreshText() => text = hasFocus ? GetString(Value) : FormatString(Value);
 
         public virtual void DeInit()
@@ -138,10 +152,21 @@ namespace ModsCommon.UI
 
         public bool UseWheel { get; set; }
         public ValueType WheelStep { get; set; }
-        public bool WheelTip
+        public bool MouseTips
         {
-            set => tooltip = value ? CommonLocalize.FieldPanel_ScrollWheel : string.Empty;
+            set {
+                tooltip = "";
+                if (value) {
+                    if (UseWheel) {
+                        tooltip += CommonLocalize.FieldPanel_ScrollWheel;
+                    }
+                    if (UseReset) {
+                        tooltip += "press delete to reset";
+                    }
+                }
+            }
         }
+
         public bool CanWheel { get; set; }
 
         protected override void ValueChanged(ValueType value, bool callEvent = true)
@@ -206,7 +231,7 @@ namespace ModsCommon.UI
             CheckMax = false;
             CyclicalValue = false;
             UseWheel = false;
-            WheelTip = false;
+            MouseTips = false;
             WheelStep = default;
         }
 

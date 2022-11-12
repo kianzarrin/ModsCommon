@@ -23,10 +23,10 @@ namespace ModsCommon.UI
         {
             set
             {
-                R.WheelTip = value;
-                G.WheelTip = value;
-                B.WheelTip = value;
-                A.WheelTip = value;
+                R.MouseTips = value;
+                G.MouseTips = value;
+                B.MouseTips = value;
+                A.MouseTips = value;
             }
         }
 

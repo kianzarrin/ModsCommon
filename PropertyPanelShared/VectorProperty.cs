@@ -1,4 +1,4 @@
-﻿using ModsCommon.UI;
+using ModsCommon.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,9 +77,9 @@ namespace ModsCommon.UI
                 get => Property.Fields[Index].WheelStep;
                 set => Property.Fields[Index].WheelStep = value;
             }
-            public bool WheelTip
+            public bool MouseTips
             {
-                set => Property.Fields[Index].WheelTip = value;
+                set => Property.Fields[Index].MouseTips = value;
             }
 
 
@@ -255,7 +255,7 @@ namespace ModsCommon.UI
             set
             {
                 for (var i = 0; i < Dimension; i += 1)
-                    Fields[i].WheelTip = value;
+                    Fields[i].MouseTips = value;
             }
         }
 
