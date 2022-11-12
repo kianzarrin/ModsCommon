@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace ModsCommon.UI
@@ -10,6 +10,7 @@ namespace ModsCommon.UI
         protected FieldType Field { get; set; }
 
         public event Action<ValueType> OnValueChanged;
+        public event Action OnResetValue;
 
         public float FieldWidth
         {
@@ -44,10 +45,12 @@ namespace ModsCommon.UI
             Field.name = nameof(Field);
 
             Field.OnValueChanged += ValueChanged;
+            Field.OnResetValue += ResetValue;
         }
 
         public void SimulateEnterValue(ValueType value) => Field.SimulateEnterValue(value);
         private void ValueChanged(ValueType value) => OnValueChanged?.Invoke(value);
+        private void ResetValue() => OnResetValue?.Invoke();
 
         public override void DeInit()
         {
@@ -98,14 +101,18 @@ namespace ModsCommon.UI
             get => Field.UseWheel;
             set => Field.UseWheel = value;
         }
+        public bool UseReset {
+            get => Field.UseReset;
+            set => Field.UseReset = value;
+        }
         public ValueType WheelStep
         {
             get => Field.WheelStep;
             set => Field.WheelStep = value;
         }
-        public bool WheelTip
+        public bool MouseTips
         {
-            set => Field.WheelTip = value;
+            set => Field.MouseTips = value;
         }
 
         public ComparableFieldPropertyPanel()
@@ -119,7 +126,15 @@ namespace ModsCommon.UI
             Field.SetDefault();
         }
     }
-    public class FloatPropertyPanel : ComparableFieldPropertyPanel<float, FloatUITextField> { }
+    public class FloatPropertyPanel : ComparableFieldPropertyPanel<float, FloatUITextField> {
+        public virtual void Init(string name = null) {
+            base.Init(height: null);
+            Text = name;
+            MouseTips = UseWheel = UseReset = true;
+            WheelStep = 1;
+            Refresh();
+        }
+    }
     public class IntPropertyPanel : ComparableFieldPropertyPanel<int, IntUITextField> { }
     public class StringPropertyPanel : FieldPropertyPanel<string, StringUITextField> { }
 
@@ -251,8 +266,8 @@ namespace ModsCommon.UI
         {
             set
             {
-                FieldA.WheelTip = value;
-                FieldB.WheelTip = value;
+                FieldA.MouseTips = value;
+                FieldB.MouseTips = value;
             }
         }
 

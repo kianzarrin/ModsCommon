@@ -1,4 +1,4 @@
-﻿using ModsCommon.UI;
+using ModsCommon.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,9 +77,9 @@ namespace ModsCommon.UI
                 get => Property.Fields[Index].WheelStep;
                 set => Property.Fields[Index].WheelStep = value;
             }
-            public bool WheelTip
+            public bool MouseTips
             {
-                set => Property.Fields[Index].WheelTip = value;
+                set => Property.Fields[Index].MouseTips = value;
             }
 
 
@@ -90,6 +90,7 @@ namespace ModsCommon.UI
             }
         }
         public event Action<TypeVector> OnValueChanged;
+        public event Action OnResetValue;
 
         bool IReusable.InCache { get; set; }
         public abstract uint Dimension { get; }
@@ -255,7 +256,7 @@ namespace ModsCommon.UI
             set
             {
                 for (var i = 0; i < Dimension; i += 1)
-                    Fields[i].WheelTip = value;
+                    Fields[i].MouseTips = value;
             }
         }
 
@@ -324,12 +325,16 @@ namespace ModsCommon.UI
             field.width = FieldsWidth;
             field.NumberFormat = "0.##";
             field.OnValueChanged += (value) => FieldChanged(index, value);
+            field.UseReset = true;
+            field.OnResetValue += ResetValue;
         }
         private void FieldChanged(int index, float value)
         {
             Set(ref _value, index, value);
             OnValueChanged?.Invoke(_value);
         }
+        private void ResetValue() => OnResetValue?.Invoke();
+
     }
 
     public class Vector2PropertyPanel : BaseVectorPropertyPanel<Vector2>
@@ -347,6 +352,13 @@ namespace ModsCommon.UI
     }
     public class Vector3PropertyPanel : BaseVectorPropertyPanel<Vector3>
     {
+        public void Init(string name) {
+            base.Init(0,1,2);
+            Text = name;
+            WheelTip = UseWheel = true;
+            WheelStep = Vector3.one;
+        }
+
         public override uint Dimension => 3;
 
         protected override float Get(ref Vector3 vector, int index) => vector[index];
