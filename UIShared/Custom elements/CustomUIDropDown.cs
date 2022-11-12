@@ -1,4 +1,4 @@
-﻿using ColossalFramework.UI;
+using ColossalFramework.UI;
 using UnityEngine;
 using static ColossalFramework.UI.UIButton;
 
@@ -137,7 +137,7 @@ namespace ModsCommon.UI
             get => _focusedFgColor ?? color;
             set
             {
-                _focusedBgColor = value;
+                _focusedFgColor = value;
                 Invalidate();
             }
         }
