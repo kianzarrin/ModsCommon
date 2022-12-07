@@ -1,4 +1,5 @@
 using ColossalFramework.UI;
+using KianCommons;
 using ModsCommon.Utilities;
 using System;
 using System.ComponentModel;
@@ -55,6 +56,7 @@ namespace ModsCommon.UI
         {
             if (!InProcess)
             {
+                Assertion.InMainThread();
                 InProcess = true;
 
                 _value = value;
